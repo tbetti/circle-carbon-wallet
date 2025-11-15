@@ -20,7 +20,7 @@
 
 import { Card } from "@/components/ui/card";
 import { FC, useState } from 'react'
-import Basic from "../../app/basic";
+import { TransferView } from "../transfer";
 import TripForm from "./TripForm"
 import ResultsContainer from "./ResultsContainer";
 
@@ -60,7 +60,7 @@ export const Home: FC = () => {
           setError={setError}
         />
         <ResultsContainer result={data} isVisible={submitted} />
-        <Basic />
+        <TransferView />
       </Card>
     </div>
   );

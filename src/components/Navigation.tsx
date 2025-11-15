@@ -13,7 +13,6 @@ export function Navigation() {
     { label: "Home", path: "/" },
     { label: "Transfer", path: "/transfer" },
     { label: "Marketplace", path: "/marketplace" },
-    { label: "Emissions", path: "/emissions" },
   ];
 
   return (

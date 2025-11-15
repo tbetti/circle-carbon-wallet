@@ -18,21 +18,29 @@ export default function ResultsContainer({ result, isVisible }: ResultsContainer
                 <div className="w-full">
                   <h3 className="text-[1.25rem] text-gray-800 mb-4 font-bold">Calculation Results</h3>
                   <ul className="text-gray-700 leading-relaxed space-y-2">
-                    <li className="flex justify-between items-center bg-blue-50 p-3 rounded">
-                      <span className="font-semibold">CO2 Emitted:</span>
-                      <span className="text-blue-600 font-bold">{result && String(result.co2Tons)} tons</span>
+                    <li className="flex justify-center items-center bg-blue-50 p-3 rounded">
+                      <div className="flex justify-between items-center w-full">
+                        <span className="font-semibold">CO2 Emitted:</span>
+                        <span className="text-blue-600 font-bold">{result && String(result.co2Tons)} tons</span>
+                      </div>
                     </li>
-                    <li className="flex justify-between items-center bg-green-50 p-3 rounded">
-                      <span className="font-semibold">Power Used:</span>
-                      <span className="text-green-600 font-bold">{result && String(result.energyKwh)} KW</span>
+                    <li className="flex justify-center items-center bg-green-50 p-3 rounded">
+                      <div className="flex justify-between items-center w-full">
+                        <span className="font-semibold">Power Used:</span>
+                        <span className="text-green-600 font-bold">{result && String(result.energyKwh)} KW</span>
+                      </div>
                     </li>
-                    <li className="flex justify-between items-center bg-orange-50 p-3 rounded">
-                      <span className="font-semibold">Credits Needed:</span>
-                      <span className="text-orange-600 font-bold">{result && String(result.creditsNeeded)} units</span>
+                    <li className="flex justify-center items-center bg-orange-50 p-3 rounded">
+                      <div className="flex justify-between items-center w-full">
+                        <span className="font-semibold">Credits Needed:</span>
+                        <span className="text-orange-600 font-bold">{result && String(result.creditsNeeded)} units</span>
+                      </div>
                     </li>
-                    <li className="flex justify-between items-center bg-purple-50 p-3 rounded">
-                      <span className="font-semibold">Estimated Cost:</span>
-                      <span className="text-purple-600 font-bold">{result && 'Varies'} USDC</span>
+                    <li className="flex justify-center items-center bg-purple-50 p-3 rounded">
+                      <div className="flex justify-between items-center w-full">
+                        <span className="font-semibold">Estimated Cost:</span>
+                        <span className="text-purple-600 font-bold">{result && 'Varies'} USDC</span>
+                      </div>
                     </li>
                   </ul>
                 </div>

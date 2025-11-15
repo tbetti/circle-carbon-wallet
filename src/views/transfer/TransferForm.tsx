@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useCrossChainTransfer } from "@/hooks/use-cross-chain-transfer";
+// Bridge Kit Integration
+import { bridgeUSDC, connectPhantom } from "@/lib/bridgeKitClient";
+import { fetchGpuCost } from "@/lib/apiClient";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -39,18 +42,79 @@ export const TransferForm = () => {
   const [isTransferring, setIsTransferring] = useState(false);
   const [showFinalTime, setShowFinalTime] = useState(false);
   const [balance, setBalance] = useState("0");
+  
+  // Bridge Kit Integration States
+  const [useBridgeKit, setUseBridgeKit] = useState(false);
+  const [carbonEmissions, setCarbonEmissions] = useState<number | null>(null);
+  const [phantomConnected, setPhantomConnected] = useState(false);
+  const [metamaskConnected, setMetamaskConnected] = useState(false);
 
-  const handleStartTransfer = async () => {
-    setIsTransferring(true);
-    setShowFinalTime(false);
-    setElapsedSeconds(0);
+  // Calculate carbon emissions for the transfer
+  const calculateCarbonEmissions = async (transferAmount: string) => {
     try {
-      await executeTransfer(sourceChain, destinationChain, amount, transferType);
+      // Mock calculation - in reality this would use the carbon API
+      // For now, simulate based on transfer amount (larger transfers = more computation = more emissions)
+      const amount = parseFloat(transferAmount);
+      const estimatedEmissions = amount * 0.001; // 0.001 kg CO2 per USDC transferred
+      setCarbonEmissions(estimatedEmissions);
+      return estimatedEmissions;
     } catch (error) {
-      console.error("Transfer failed:", error);
+      console.error("Failed to calculate carbon emissions:", error);
+      return 0;
+    }
+  };
+
+  // Bridge Kit Transfer Handler
+  const handleBridgeKitTransfer = async () => {
+    try {
+      setIsTransferring(true);
+      setElapsedSeconds(0);
+      
+      // 1. Calculate carbon emissions first
+      await calculateCarbonEmissions(amount);
+      
+      // 2. Connect wallets if needed
+      if (!phantomConnected) {
+        await connectPhantom();
+        setPhantomConnected(true);
+      }
+      
+      // 3. Execute Bridge Kit transfer
+      const result = await bridgeUSDC(amount);
+      console.log("Bridge Kit transfer successful:", result);
+      
+      // 4. Auto-mint carbon credits after successful Bridge Kit transfer
+      // This will be handled in the Bridge Kit success callback
+      
+    } catch (error) {
+      console.error("Bridge Kit transfer failed:", error);
     } finally {
       setIsTransferring(false);
       setShowFinalTime(true);
+    }
+  };
+
+  // Main transfer handler - chooses between Bridge Kit and manual CCTP
+  const handleStartTransfer = async () => {
+    const isSolanaToArc = sourceChain === SupportedChainId.SOLANA_DEVNET && 
+                          destinationChain === SupportedChainId.ARC_TESTNET;
+    
+    if (useBridgeKit && isSolanaToArc) {
+      // Use Bridge Kit for Solana -> Arc transfers
+      await handleBridgeKitTransfer();
+    } else {
+      // Use manual CCTP for other combinations
+      setIsTransferring(true);
+      setShowFinalTime(false);
+      setElapsedSeconds(0);
+      try {
+        await executeTransfer(sourceChain, destinationChain, amount, transferType);
+      } catch (error) {
+        console.error("Transfer failed:", error);
+      } finally {
+        setIsTransferring(false);
+        setShowFinalTime(true);
+      }
     }
   };
 
@@ -74,6 +138,15 @@ export const TransferForm = () => {
     wrapper();
   }, [sourceChain, getBalance]);
 
+  // Calculate carbon emissions when amount changes
+  useEffect(() => {
+    if (amount && parseFloat(amount) > 0 && useBridgeKit) {
+      calculateCarbonEmissions(amount);
+    } else {
+      setCarbonEmissions(null);
+    }
+  }, [amount, useBridgeKit]);
+
   return (
     <>
       <CardHeader>
@@ -85,6 +158,52 @@ export const TransferForm = () => {
         </p>
       </CardHeader>
       <CardContent className="space-y-6">
+        {/* Bridge Kit Toggle */}
+        {sourceChain === SupportedChainId.SOLANA_DEVNET && 
+         destinationChain === SupportedChainId.ARC_TESTNET && (
+          <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm font-bold">🌉</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800">Bridge Kit Enhanced Transfer</h3>
+                  <p className="text-sm text-gray-600">Optimized Solana → Arc transfer with automatic carbon offsetting</p>
+                </div>
+              </div>
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={useBridgeKit}
+                  onChange={(e) => setUseBridgeKit(e.target.checked)}
+                  className="sr-only"
+                />
+                <div className={`w-11 h-6 rounded-full transition-colors ${
+                  useBridgeKit ? 'bg-gradient-to-r from-purple-500 to-blue-500' : 'bg-gray-300'
+                }`}>
+                  <div className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform ${
+                    useBridgeKit ? 'translate-x-6' : 'translate-x-1'
+                  } mt-1`} />
+                </div>
+              </label>
+            </div>
+            {useBridgeKit && (
+              <div className="mt-3 p-3 bg-white/50 rounded-lg">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">Carbon Impact:</span>
+                  <span className="font-medium text-green-600">
+                    {carbonEmissions ? `~${carbonEmissions.toFixed(3)} kg CO₂` : 'Calculating...'}
+                  </span>
+                </div>
+                <div className="mt-1 text-xs text-gray-500">
+                  Carbon credits will be automatically minted to offset this transfer
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="space-y-2">
           <Label>Transfer Type</Label>
           <TransferTypeSelector value={transferType} onChange={setTransferType} />
@@ -227,6 +346,9 @@ export const TransferForm = () => {
               </span>
             ) : currentStep === "completed" ? (
               "✅ Transfer Complete"
+            ) : useBridgeKit && sourceChain === SupportedChainId.SOLANA_DEVNET && 
+                 destinationChain === SupportedChainId.ARC_TESTNET ? (
+              `🌉 Bridge Kit: Send ${amount ? `${amount} USDC` : "USDC"}`
             ) : (
               `Send ${amount ? `${amount} USDC` : "USDC"}`
             )}

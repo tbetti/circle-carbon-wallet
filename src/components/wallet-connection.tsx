@@ -61,6 +61,14 @@ export function WalletConnection({ onWalletConnected, onWalletDisconnected }: Wa
         method: 'eth_requestAccounts',
       });
 
+      console.log('🔗 METAMASK DEBUG: All available accounts:', accounts);
+      console.log('🔗 METAMASK DEBUG: Expected address: 0x3e87719908519654d54059c77e87a71d0684b36d');
+      console.log('🔗 METAMASK DEBUG: Current selected account:', accounts[0]);
+      
+      const expectedAddress = '0x3e87719908519654d54059c77e87a71d0684b36d';
+      const hasExpectedAccount = accounts.some((addr: string) => addr.toLowerCase() === expectedAddress.toLowerCase());
+      console.log('🔗 METAMASK DEBUG: Expected account available:', hasExpectedAccount);
+
       if (accounts.length > 0) {
         setMetamaskAddress(accounts[0]);
         onWalletConnected?.('metamask', accounts[0]);
@@ -125,6 +133,20 @@ export function WalletConnection({ onWalletConnected, onWalletDisconnected }: Wa
                 <div className="text-sm text-green-600 bg-green-50 p-2 rounded border">
                   ✅ Connected: {formatAddress(metamaskAddress)}
                 </div>
+                {metamaskAddress.toLowerCase() !== '0x3e87719908519654d54059c77e87a71d0684b36d'.toLowerCase() && (
+                  <div className="text-xs text-amber-600 bg-amber-50 p-2 rounded border">
+                    ⚠️ This account may not have USDC on Arc Testnet. Expected: {formatAddress('0x3e87719908519654d54059c77e87a71d0684b36d')}
+                    <br />
+                    <span className="text-amber-700">Switch accounts in MetaMask if needed.</span>
+                    <Button 
+                      onClick={() => window.ethereum?.request({ method: 'wallet_requestPermissions', params: [{ eth_accounts: {} }] })}
+                      className="mt-2 w-full text-xs bg-amber-100 text-amber-800 border-amber-300 hover:bg-amber-200"
+                      size="sm"
+                    >
+                      Switch Account in MetaMask
+                    </Button>
+                  </div>
+                )}
                 <Button 
                   onClick={disconnectMetaMask}
                   className="w-full border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 text-sm px-3 py-1"

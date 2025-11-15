@@ -29,6 +29,7 @@ export enum SupportedChainId {
   WORLDCHAIN_SEPOLIA = 4801,
   OPTIMISM_SEPOLIA = 11155420,
   SOLANA_DEVNET = 103,
+  SOLANA_MAINNET = 102,
   CODEX_TESTNET = 812242,
   UNICHAIN_SEPOLIA = 1301,
   POLYGON_AMOY = 80002,
@@ -53,6 +54,7 @@ export const CHAIN_TO_CHAIN_NAME: Record<number, string> = {
   [SupportedChainId.WORLDCHAIN_SEPOLIA]: "Worldchain Sepolia",
   [SupportedChainId.OPTIMISM_SEPOLIA]: "Optimism Sepolia",
   [SupportedChainId.SOLANA_DEVNET]: "Solana Devnet",
+  [SupportedChainId.SOLANA_MAINNET]: "Solana Mainnet",
   [SupportedChainId.CODEX_TESTNET]: "Codex Testnet",
   [SupportedChainId.UNICHAIN_SEPOLIA]: "Unichain Sepolia",
   [SupportedChainId.POLYGON_AMOY]: "Polygon Amoy",
@@ -73,7 +75,8 @@ export const CHAIN_IDS_TO_USDC_ADDRESSES: Record<number, Hex | string> = {
   [SupportedChainId.ARBITRUM_SEPOLIA]: "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d",
   [SupportedChainId.WORLDCHAIN_SEPOLIA]: "0x66145f38cBAC35Ca6F1Dfb4914dF98F1614aeA88",
   [SupportedChainId.OPTIMISM_SEPOLIA]: "0x5fd84259d66Cd46123540766Be93DFE6D43130D7",
-  [SupportedChainId.SOLANA_DEVNET]: "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+  [SupportedChainId.SOLANA_DEVNET]: "AobnXnLntTK29Tax33aBhf9aiZVGz1sqEEHMHVR4Hir4", // Mock USDC for testing
+  [SupportedChainId.SOLANA_MAINNET]: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
   [SupportedChainId.CODEX_TESTNET]: "0x6d7f141b6819C2c9CC2f818e6ad549E7Ca090F8f",
   [SupportedChainId.UNICHAIN_SEPOLIA]: "0x31d0220469e10c4E71834a79b1f276d740d3768F",
   [SupportedChainId.POLYGON_AMOY]: "0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582",
@@ -95,6 +98,7 @@ export const CHAIN_IDS_TO_TOKEN_MESSENGER: Record<number, Hex | string> = {
   [SupportedChainId.WORLDCHAIN_SEPOLIA]: "0x8fe6b999dc680ccfdd5bf7eb0974218be2542daa",
   [SupportedChainId.OPTIMISM_SEPOLIA]: "0x8fe6b999dc680ccfdd5bf7eb0974218be2542daa",
   [SupportedChainId.SOLANA_DEVNET]: "CCTPV2vPZJS2u2BBsUoscuikbYjnpFmbFsvVuJdgUMQe",
+  [SupportedChainId.SOLANA_MAINNET]: "CCTPdkqqJgE1DA24kp1hQwNZAYqLy4g2YFTCEGEYHzkg",
   [SupportedChainId.CODEX_TESTNET]: "0x8fe6b999dc680ccfdd5bf7eb0974218be2542daa",
   [SupportedChainId.UNICHAIN_SEPOLIA]: "0x8fe6b999dc680ccfdd5bf7eb0974218be2542daa",
   [SupportedChainId.POLYGON_AMOY]: "0x8fe6b999dc680ccfdd5bf7eb0974218be2542daa",
@@ -116,6 +120,7 @@ export const CHAIN_IDS_TO_MESSAGE_TRANSMITTER: Record<number, Hex | string> = {
   [SupportedChainId.WORLDCHAIN_SEPOLIA]: "0xe737e5cebeeba77efe34d4aa090756590b1ce275",
   [SupportedChainId.OPTIMISM_SEPOLIA]: "0xe737e5cebeeba77efe34d4aa090756590b1ce275",
   [SupportedChainId.SOLANA_DEVNET]: "CCTPV2Sm4AdWt5296sk4P66VBZ7bEhcARwFaaS9YPbeC",
+  [SupportedChainId.SOLANA_MAINNET]: "CCTPiPYPc6AsJuwueEnWgSgucamXDZwBd53dQ11YiKX3",
   [SupportedChainId.CODEX_TESTNET]: "0xe737e5cebeeba77efe34d4aa090756590b1ce275",
   [SupportedChainId.UNICHAIN_SEPOLIA]: "0xe737e5cebeeba77efe34d4aa090756590b1ce275",
   [SupportedChainId.POLYGON_AMOY]: "0xe737e5cebeeba77efe34d4aa090756590b1ce275",
@@ -137,6 +142,7 @@ export const DESTINATION_DOMAINS: Record<number, number> = {
   [SupportedChainId.WORLDCHAIN_SEPOLIA]: 14,
   [SupportedChainId.OPTIMISM_SEPOLIA]: 2,
   [SupportedChainId.SOLANA_DEVNET]: 5,
+  [SupportedChainId.SOLANA_MAINNET]: 5,
   [SupportedChainId.CODEX_TESTNET]: 12,
   [SupportedChainId.UNICHAIN_SEPOLIA]: 10,
   [SupportedChainId.POLYGON_AMOY]: 7,
@@ -158,6 +164,7 @@ export const SUPPORTED_CHAINS = [
   SupportedChainId.WORLDCHAIN_SEPOLIA,
   SupportedChainId.OPTIMISM_SEPOLIA,
   SupportedChainId.SOLANA_DEVNET,
+  SupportedChainId.SOLANA_MAINNET,
   SupportedChainId.CODEX_TESTNET,
   SupportedChainId.UNICHAIN_SEPOLIA,
   SupportedChainId.POLYGON_AMOY,
@@ -168,8 +175,17 @@ export const SUPPORTED_CHAINS = [
   SupportedChainId.INK_SEPOLIA,
 ];
 
-// Solana RPC endpoint
+// Solana RPC endpoints
 export const SOLANA_RPC_ENDPOINT = "https://api.devnet.solana.com";
+export const SOLANA_MAINNET_RPC_ENDPOINT = "https://solana-mainnet.g.alchemy.com/v2/demo";
+
+// Get Solana RPC endpoint based on chain ID
+export const getSolanaRPC = (chainId: number): string => {
+  if (chainId === SupportedChainId.SOLANA_MAINNET) {
+    return SOLANA_MAINNET_RPC_ENDPOINT;
+  }
+  return SOLANA_RPC_ENDPOINT; // Default to devnet
+};
 
 // IRIS API URL for CCTP attestations (testnet)
 export const IRIS_API_URL = process.env.IRIS_API_URL ?? "https://iris-api-sandbox.circle.com";

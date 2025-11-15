@@ -26,16 +26,28 @@ import { ProgressSteps } from "@/components/progress-step";
 import { TransferLog } from "@/components/transfer-log";
 import { Timer } from "@/components/timer";
 import { TransferTypeSelector } from "@/components/transfer-type";
+import { WalletConnection } from "@/components/wallet-connection";
 
 export const TransferForm = () => {
   const [transferType, setTransferType] = useState<"fast" | "standard">("fast");
+  
+  // Wallet connection states
+  const [phantomAddress, setPhantomAddress] = useState<string | null>(null);
+  const [metamaskAddress, setMetamaskAddress] = useState<string | null>(null);
+  
+  // Pass wallet connections to the hook
+  console.log(`🔗 HOOK DEBUG: Passing addresses to hook - Phantom: ${phantomAddress}, MetaMask: ${metamaskAddress}`);
   const { currentStep, logs, error, executeTransfer, getBalance, reset } =
-    useCrossChainTransfer();
+    useCrossChainTransfer({ 
+      phantomAddress: phantomAddress || undefined,
+      metamaskAddress: metamaskAddress || undefined
+    });
+    
   const [sourceChain, setSourceChain] = useState<SupportedChainId>(
-    SupportedChainId.ARC_TESTNET
+    SupportedChainId.ETH_SEPOLIA
   );
   const [destinationChain, setDestinationChain] = useState<SupportedChainId>(
-    SupportedChainId.ETH_SEPOLIA
+    SupportedChainId.ARC_TESTNET
   );
   const [amount, setAmount] = useState("");
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
@@ -44,10 +56,32 @@ export const TransferForm = () => {
   const [balance, setBalance] = useState("0");
   
   // Bridge Kit Integration States
-  const [useBridgeKit, setUseBridgeKit] = useState(false);
+  const [useBridgeKit, setUseBridgeKit] = useState(true); // Always enabled for Solana → Arc
   const [carbonEmissions, setCarbonEmissions] = useState<number | null>(null);
-  const [phantomConnected, setPhantomConnected] = useState(false);
-  const [metamaskConnected, setMetamaskConnected] = useState(false);
+
+  // Wallet connection handlers
+  const handleWalletConnected = (walletType: 'phantom' | 'metamask', address: string) => {
+    console.log(`🔗 WALLET DEBUG: ${walletType} connected with address: ${address}`);
+    console.log(`🔗 WALLET DEBUG: Address length: ${address.length} characters`);
+    console.log(`🔗 WALLET DEBUG: Address type: ${typeof address}`);
+    
+    if (walletType === 'phantom') {
+      setPhantomAddress(address);
+      console.log(`🔗 WALLET DEBUG: Phantom address set to: ${address}`);
+      console.log(`🔗 WALLET DEBUG: Is valid Solana address format: ${address.length >= 32 && address.length <= 44}`);
+    } else if (walletType === 'metamask') {
+      setMetamaskAddress(address);
+      console.log(`🔗 WALLET DEBUG: MetaMask address set to: ${address}`);
+      console.log(`🔗 WALLET DEBUG: Expected address: 0x3e87719908519654d54059c77e87a71d0684b36d`);
+      console.log(`🔗 WALLET DEBUG: Address match: ${address.toLowerCase() === '0x3e87719908519654d54059c77e87a71d0684b36d'.toLowerCase()}`);
+    }
+  };
+
+  const handleWalletDisconnected = () => {
+    console.log(`🔗 WALLET DEBUG: Wallets disconnected`);
+    setPhantomAddress(null);
+    setMetamaskAddress(null);
+  };
 
   // Calculate carbon emissions for the transfer
   const calculateCarbonEmissions = async (transferAmount: string) => {
@@ -73,11 +107,8 @@ export const TransferForm = () => {
       // 1. Calculate carbon emissions first
       await calculateCarbonEmissions(amount);
       
-      // 2. Connect wallets if needed
-      if (!phantomConnected) {
-        await connectPhantom();
-        setPhantomConnected(true);
-      }
+      // 2. Connect wallets if needed (placeholder for now)
+      // Note: Wallet connection will be handled by WalletConnection component
       
       // 3. Execute Bridge Kit transfer
       const result = await bridgeUSDC(amount);
@@ -96,25 +127,25 @@ export const TransferForm = () => {
 
   // Main transfer handler - chooses between Bridge Kit and manual CCTP
   const handleStartTransfer = async () => {
-    const isSolanaToArc = sourceChain === SupportedChainId.SOLANA_DEVNET && 
+    const isSolanaToArc = (sourceChain === SupportedChainId.SOLANA_DEVNET || sourceChain === SupportedChainId.SOLANA_MAINNET) && 
                           destinationChain === SupportedChainId.ARC_TESTNET;
     
-    if (useBridgeKit && isSolanaToArc) {
-      // Use Bridge Kit for Solana -> Arc transfers
-      await handleBridgeKitTransfer();
-    } else {
-      // Use manual CCTP for other combinations
-      setIsTransferring(true);
-      setShowFinalTime(false);
-      setElapsedSeconds(0);
-      try {
-        await executeTransfer(sourceChain, destinationChain, amount, transferType);
-      } catch (error) {
-        console.error("Transfer failed:", error);
-      } finally {
-        setIsTransferring(false);
-        setShowFinalTime(true);
-      }
+    if (isSolanaToArc) {
+      console.log("🌉 Starting Solana → Arc bridge transfer");
+      console.log(`📊 Bridging ${amount} USDC from Phantom (${phantomAddress}) to MetaMask (${metamaskAddress})`);
+    }
+    
+    // Use Circle's CCTP for all cross-chain transfers
+    setIsTransferring(true);
+    setShowFinalTime(false);
+    setElapsedSeconds(0);
+    try {
+      await executeTransfer(sourceChain, destinationChain, amount, transferType);
+    } catch (error) {
+      console.error("Transfer failed:", error);
+    } finally {
+      setIsTransferring(false);
+      setShowFinalTime(true);
     }
   };
 
@@ -158,49 +189,67 @@ export const TransferForm = () => {
         </p>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Bridge Kit Toggle */}
-        {sourceChain === SupportedChainId.SOLANA_DEVNET && 
+        {/* Wallet Connection */}
+        <WalletConnection 
+          onWalletConnected={handleWalletConnected}
+          onWalletDisconnected={handleWalletDisconnected}
+        />
+        
+        {/* Bridge Interface for Solana → Arc */}
+        {(sourceChain === SupportedChainId.SOLANA_DEVNET || sourceChain === SupportedChainId.SOLANA_MAINNET) && 
          destinationChain === SupportedChainId.ARC_TESTNET && (
           <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-sm font-bold">🌉</span>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800">Bridge Kit Enhanced Transfer</h3>
-                  <p className="text-sm text-gray-600">Optimized Solana → Arc transfer with automatic carbon offsetting</p>
-                </div>
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm font-bold">🌉</span>
               </div>
-              <label className="flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={useBridgeKit}
-                  onChange={(e) => setUseBridgeKit(e.target.checked)}
-                  className="sr-only"
-                />
-                <div className={`w-11 h-6 rounded-full transition-colors ${
-                  useBridgeKit ? 'bg-gradient-to-r from-purple-500 to-blue-500' : 'bg-gray-300'
-                }`}>
-                  <div className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform ${
-                    useBridgeKit ? 'translate-x-6' : 'translate-x-1'
-                  } mt-1`} />
-                </div>
-              </label>
+              <div>
+                <h3 className="font-semibold text-gray-800">Bridge USDC: Solana → Arc Testnet</h3>
+                <p className="text-sm text-gray-600">Bridge your USDC from Solana to Arc Testnet using Circle's CCTP</p>
+              </div>
             </div>
-            {useBridgeKit && (
-              <div className="mt-3 p-3 bg-white/50 rounded-lg">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600">Carbon Impact:</span>
-                  <span className="font-medium text-green-600">
-                    {carbonEmissions ? `~${carbonEmissions.toFixed(3)} kg CO₂` : 'Calculating...'}
+
+            {/* Wallet Status */}
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="bg-white/70 rounded-lg p-3">
+                <div className="text-xs font-medium text-gray-600 mb-1">FROM: Solana</div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded-full bg-purple-500"></div>
+                  <span className="text-sm font-medium">
+                    {phantomAddress ? `${phantomAddress.slice(0, 4)}...${phantomAddress.slice(-4)}` : 'Not connected'}
                   </span>
                 </div>
-                <div className="mt-1 text-xs text-gray-500">
-                  Carbon credits will be automatically minted to offset this transfer
-                </div>
+                {phantomAddress && (
+                  <div className="text-xs text-purple-600 mt-1">Balance: {balance} USDC</div>
+                )}
               </div>
-            )}
+              
+              <div className="bg-white/70 rounded-lg p-3">
+                <div className="text-xs font-medium text-gray-600 mb-1">TO: Arc Testnet</div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded-full bg-blue-500"></div>
+                  <span className="text-sm font-medium">
+                    {metamaskAddress ? `${metamaskAddress.slice(0, 4)}...${metamaskAddress.slice(-4)}` : 'Not connected'}
+                  </span>
+                </div>
+                {metamaskAddress && (
+                  <div className="text-xs text-blue-600 mt-1">Will receive bridged USDC</div>
+                )}
+              </div>
+            </div>
+
+            {/* Carbon Impact */}
+            <div className="bg-white/50 rounded-lg p-3">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-600">Carbon Impact:</span>
+                <span className="font-medium text-green-600">
+                  {carbonEmissions ? `~${carbonEmissions.toFixed(3)} kg CO₂` : amount ? 'Calculating...' : 'Enter amount to calculate'}
+                </span>
+              </div>
+              <div className="mt-1 text-xs text-gray-500">
+                Carbon credits will be automatically minted to offset this transfer
+              </div>
+            </div>
           </div>
         )}
 
@@ -272,11 +321,20 @@ export const TransferForm = () => {
               type="button"
               onClick={() => setAmount(balance)}
               className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+              disabled={parseFloat(balance) === 0}
             >
               Use Max
             </button>
           </div>
-          {amount && parseFloat(amount) > parseFloat(balance) && (
+          {parseFloat(balance) === 0 && (
+            <div className="text-sm text-amber-600 bg-amber-50 p-2 rounded border">
+              ⚠️ No USDC found. Check if:
+              <br />• You're connected to the right wallet account
+              <br />• Your wallet has USDC on the selected network
+              <br />• You're on the correct network in MetaMask/Phantom
+            </div>
+          )}
+          {amount && parseFloat(amount) > parseFloat(balance) && parseFloat(balance) > 0 && (
             <p className="text-sm text-red-500 font-medium">Insufficient balance</p>
           )}
         </div>

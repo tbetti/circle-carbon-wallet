@@ -60,7 +60,6 @@ export const Home: FC = () => {
           setError={setError}
         />
         <ResultsContainer result={data} isVisible={submitted} />
-        <TransferView />
       </Card>
     </div>
   );

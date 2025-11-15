@@ -2,7 +2,12 @@ import { Button } from '../../components/ui/button'
 import { Card, CardContent } from '../../components/ui/card'
 import Link from 'next/link';
 
-export default function ResultsContainer({result, isVisible}) {
+interface ResultsContainerProps {
+  result: Record<string, unknown> | null;
+  isVisible: boolean;
+}
+
+export default function ResultsContainer({ result, isVisible }: ResultsContainerProps) {
   return (
     <>
       {isVisible && (
@@ -15,15 +20,15 @@ export default function ResultsContainer({result, isVisible}) {
                   <ul className="text-[#fdfdfd] leading-relaxed">
                     <li>
                       <span className="text-3sm">✅</span>
-                      <span className="font-semibold">CO2 Emitted: </span>{result && result.co2Tons} tons
+                      <span className="font-semibold">CO2 Emitted: </span>{result && String(result.co2Tons)} tons
                     </li>
                     <li>
                       <span className="text-3sm">✅</span>
-                      <span className="font-semibold">Power Used: </span>{result && result.energyKwh} KW
+                      <span className="font-semibold">Power Used: </span>{result && String(result.energyKwh)} KW
                     </li>
                     <li>
                       <span className="text-3sm">✅</span>
-                      <span className="font-semibold">Credit Needed: </span>{result && result.creditsNeeded} KW
+                      <span className="font-semibold">Credit Needed: </span>{result && String(result.creditsNeeded)} KW
                     </li>
                     <li>
                       <span className="text-3sm">✅</span>

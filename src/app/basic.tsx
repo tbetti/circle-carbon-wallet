@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { useCrossChainTransfer } from "@/hooks/use-cross-chain-transfer";
 

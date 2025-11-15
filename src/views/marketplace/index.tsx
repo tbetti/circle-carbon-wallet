@@ -8,9 +8,9 @@ import pkg from '../../../package.json'; // Adjust path as needed
 import { ListingsDisplay } from './ListingsDisplay';
 
 export const MarketPlaceView: FC = ({}) => {
-  const [listings, setListings] = useState(null);
+  const [listings, setListings] = useState<Record<string, unknown>[] | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   // This useEffect runs once when the component mounts
   useEffect(() => {
@@ -32,7 +32,8 @@ export const MarketPlaceView: FC = ({}) => {
         setListings(result.data.listings || []);
       } catch (err) {
         console.error('Failed to fetch listings:', err);
-        setError(err.message);
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -58,7 +59,7 @@ export const MarketPlaceView: FC = ({}) => {
     }
 
     // Pass the fetched listings to the new display component
-    return <ListingsDisplay listings={listings} />;
+    return <ListingsDisplay listings={listings || []} />;
   };
 
   return (

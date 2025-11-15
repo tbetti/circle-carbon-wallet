@@ -25,9 +25,9 @@ import TripForm from "./TripForm"
 import ResultsContainer from "./ResultsContainer";
 
 export const Home: FC = () => {
-  const [data, setData] = useState('');
+  const [data, setData] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Record<string, string> | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
   const handleCalculate = async () => {
@@ -43,7 +43,8 @@ export const Home: FC = () => {
       // setData(result.data); // Store the successful response
       setData({});
     } catch (err) {
-      setError(err.message);
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setError({ general: errorMessage });
     } finally {
       setLoading(false);
     }

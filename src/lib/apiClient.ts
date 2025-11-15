@@ -11,7 +11,9 @@
  * @throws {Error} - Throws an error if the API call fails.
  */
 
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000/api/';
+// ⚠️ IMPORTANT: Using local Next.js API routes (src/app/api/*)
+// These are mock endpoints for marketplace and carbon calculation testing
+const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '/api/';
 
 export const fetchGpuCost = async ({ gpuType, hours, region }: { gpuType: string; hours: number; region: string }) => {
   // Construct the request body from the arguments

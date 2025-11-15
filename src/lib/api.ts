@@ -15,7 +15,7 @@ export function handler(
   res.status(200).json({ name: 'John Doe' })
 }
 
-export async function carbonHandler(req, res) {
+export async function carbonHandler(req: NextApiRequest, res: NextApiResponse) {
    try {
     const response = await fetch(`${backendUrl}calculate`, {
       method: req.method,

@@ -2,11 +2,11 @@
 
 import { Zap, Check, Loader2, Earth, Hourglass } from 'lucide-react'
 import { useState } from 'react'
-import { Button } from '../../components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
-import { Input } from '../../components/ui/input'
-import { Label } from '../../components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 // import { Separator } from '../components/ui/separator'
 
 type Props = {
@@ -34,7 +34,7 @@ export default function TripForm({ onCalculate, loading, submitted, setSubmitted
     const newErrors: Record<string, string> = {}
 
     if (!gpuType) {
-      newErrors.actualMode = 'Please select a GPU Type.'
+      newErrors.gpuType = 'Please select a GPU Type.'
     }
 
     const hoursNum = parseFloat(hours)
@@ -47,7 +47,7 @@ export default function TripForm({ onCalculate, loading, submitted, setSubmitted
     }
 
     if (!region) {
-      newErrors.actualMode = 'Please select a region.'
+      newErrors.region = 'Please select a region.'
     }
 
     setError(newErrors)

@@ -103,8 +103,8 @@ export default function TripForm({ onCalculate, loading, submitted, setSubmitted
       <CardContent className="px-10 py-8">
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="gpuType" className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-[#667085]" />
+            <Label htmlFor="gpuType" className="flex items-center gap-2 text-gray-800">
+              <Zap className="w-4 h-4 text-gray-600" />
               GPU Type
             </Label>
             <Select value={gpuType} onValueChange={handleGpuType}>

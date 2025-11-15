@@ -77,10 +77,10 @@ export const TransferForm = () => {
   return (
     <>
       <CardHeader>
-        <CardTitle className="text-center text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+        <CardTitle className="text-center text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
           Cross-Chain USDC Transfer
         </CardTitle>
-        <p className="text-center text-gray-600 text-sm mt-2">
+        <p className="text-center text-gray-600 text-xs md:text-sm mt-2">
           Move USDC securely across 16 blockchains
         </p>
       </CardHeader>

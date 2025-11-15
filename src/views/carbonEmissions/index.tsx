@@ -54,7 +54,7 @@ export const Home: FC = () => {
       <Card className="max-w-3xl mx-auto shadow-lg border-0">
         {/* Header */}
         <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-t-lg">
-          <CardTitle className="text-3xl md:text-4xl font-bold">
+          <CardTitle className="text-2xl md:text-3xl lg:text-4xl font-bold">
             GPU Carbon Calculator
           </CardTitle>
           <p className="text-blue-100 mt-2">

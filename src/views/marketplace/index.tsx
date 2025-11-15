@@ -66,13 +66,13 @@ export const MarketPlaceView: FC = ({}) => {
       <div className="max-w-6xl mx-auto">
         {/* Header Section */}
         <div className="mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold text-center mb-4 text-transparent bg-clip-text bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-center mb-4 text-transparent bg-clip-text bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600">
             Carbon Credit Marketplace
           </h1>
-          <p className="text-center text-lg text-gray-600 mb-2">
+          <p className="text-center text-base md:text-lg text-gray-600 mb-2">
             Offset the environmental impact of your cross-chain transfers
           </p>
-          <p className="text-center text-sm text-gray-500">
+          <p className="text-center text-xs md:text-sm text-gray-500">
             Every transfer has a carbon cost. Purchase verified credits to make your transfers climate-neutral.
           </p>
         </div>

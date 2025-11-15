@@ -28,8 +28,9 @@ contract OffsetManager {
         bool ok = usdc.transferFrom(msg.sender, address(this), usdcAmount);
         require(ok, "USDC transfer failed");
 
-        // 1 USDC = 1 carbon point (simple demo logic)
-        carbonPoints.mintPoints(msg.sender, usdcAmount);
+        // 1 USDC = 1 carbon point (convert decimals: USDC=6, CPOINT=18)
+        uint256 carbonAmount = usdcAmount * (10 ** 12); // Convert 6 decimals to 18 decimals
+        carbonPoints.mintPoints(msg.sender, carbonAmount);
     }
 
     /// Withdraw accumulated USDC (optional)

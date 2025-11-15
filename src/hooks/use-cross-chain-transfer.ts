@@ -68,6 +68,9 @@ import {
   TokenInvalidAccountOwnerError,
 } from "@solana/spl-token";
 import bs58 from "bs58";
+
+// Carbon contracts for minting carbon points on Arc Testnet
+import { CARBON_CONTRACTS, OFFSET_MANAGER_ABI, USDC_ABI } from "../lib/carbon-contracts";
 import { hexlify } from "ethers";
 // Import BN at top level like Circle's examples
 import { BN } from "@coral-xyz/anchor";
@@ -844,6 +847,57 @@ export function useCrossChainTransfer() {
     }
   };
 
+  // 🌱 MINT CARBON POINTS AFTER USDC ARRIVES ON ARC
+  const mintCarbonPoints = async (
+    client: any,
+    chainId: number,
+    usdcAmount: bigint
+  ) => {
+    try {
+      addLog("🌱 Minting carbon points for USDC offset...");
+
+      // Check if contracts are deployed
+      if (!CARBON_CONTRACTS.OFFSET_MANAGER) {
+        addLog("⚠️ Carbon contracts not deployed yet. Skipping carbon minting.");
+        return;
+      }
+
+      const privateKey = getPrivateKeyForChain(chainId);
+      const account = privateKeyToAccount(`0x${privateKey.replace(/^0x/, "")}`);
+      
+      const walletClient = createWalletClient({
+        account,
+        chain: chains[chainId as keyof typeof chains],
+        transport: http(),
+      });
+
+      // First approve USDC spending
+      addLog("📝 Approving USDC spending for carbon offset...");
+      const approveTxHash = await walletClient.writeContract({
+        address: CARBON_CONTRACTS.USDC_ADDRESS as `0x${string}`,
+        abi: USDC_ABI,
+        functionName: "approve",
+        args: [CARBON_CONTRACTS.OFFSET_MANAGER, usdcAmount],
+      });
+      addLog(`✅ USDC approved: ${approveTxHash}`);
+
+      // Call OffsetManager.buyOffsets() to mint carbon points
+      const txHash = await walletClient.writeContract({
+        address: CARBON_CONTRACTS.OFFSET_MANAGER as `0x${string}`,
+        abi: OFFSET_MANAGER_ABI,
+        functionName: "buyOffsets",
+        args: [usdcAmount],
+      });
+
+      addLog(`✅ Carbon points minted! TX: ${txHash}`);
+      addLog(`🌱 You earned carbon points for offsetting ${formatUnits(usdcAmount, 6)} USDC!`);
+      
+    } catch (error) {
+      addLog(`❌ Failed to mint carbon points: ${error instanceof Error ? error.message : "Unknown error"}`);
+      // Don't throw - carbon minting is optional, USDC transfer still succeeded
+    }
+  };
+
   const executeTransfer = async (
     sourceChainId: number,
     destinationChainId: number,
@@ -950,6 +1004,11 @@ export function useCrossChainTransfer() {
         await mintSolanaUSDC(destinationClient, attestation);
       } else {
         await mintUSDC(destinationClient, destinationChainId, attestation);
+        
+        // 🌱 CARBON MINTING: After USDC arrives on Arc Testnet, mint carbon points
+        if (destinationChainId === CARBON_CONTRACTS.ARC_CHAIN_ID) {
+          await mintCarbonPoints(destinationClient, destinationChainId, numericAmount);
+        }
       }
     } catch (error) {
       setCurrentStep("error");

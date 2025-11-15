@@ -14,9 +14,15 @@ const config: HardhatUserConfig = {
     },
     arcTestnet: {
       type: "http",
-      url: process.env.ARC_RPC_URL || "https://testnet-rpc.arc.xyz",
+      url: process.env.ARC_RPC_URL || "https://rpc.testnet.arc.network",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 462
+      chainId: 5042002
+    },
+    baseSepolia: {
+      type: "http",
+      url: "https://sepolia.base.org",
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+      chainId: 84532
     }
   }
 };

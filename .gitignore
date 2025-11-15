@@ -43,3 +43,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Hardhat files
+cache/
+artifacts/
+*.tmp
+.hardhat_console_history

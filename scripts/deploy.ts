@@ -1,4 +1,4 @@
-import { getContractFactory } from "hardhat";
+import hre from "hardhat";
 import { createWalletClient, http, defineChain } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import dotenv from "dotenv";
@@ -31,7 +31,7 @@ async function main() {
   });
 
   console.log("🚀 Deploying CarbonPoints...");
-  const CarbonPoints = await getContractFactory("CarbonPoints");
+  const CarbonPoints = await hre.ethers.getContractFactory("CarbonPoints");
   const carbon = await CarbonPoints.deploy();
   await carbon.waitForDeployment();
   const carbonAddress = await carbon.getAddress();

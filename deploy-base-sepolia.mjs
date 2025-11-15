@@ -16,12 +16,12 @@ function loadContract(name) {
 }
 
 async function deploy() {
-  console.log('🚀 Starting deployment to Arc Testnet...');
+  console.log('🚀 Starting deployment to Base Sepolia...');
   
   // Network configuration
-  const RPC_URL = process.env.ARC_RPC_URL || 'https://rpc.testnet.arc.network';
+  const RPC_URL = 'https://sepolia.base.org';
   const PRIVATE_KEY = process.env.PRIVATE_KEY || '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
-  const USDC_ADDRESS = process.env.ARC_USDC_ADDRESS || '0x3600000000000000000000000000000000000000';
+  const USDC_ADDRESS = '0x036CbD53842c5426634e7929541eC2318f3dCF7e'; // Base Sepolia USDC
   
   // Setup provider and wallet
   const provider = new ethers.JsonRpcProvider(RPC_URL);
@@ -29,14 +29,14 @@ async function deploy() {
   
   console.log('📍 Deploying from address:', wallet.address);
   
-  // Check USDC balance (Arc uses USDC for gas!)
+  // Check balance
   try {
     const balance = await provider.getBalance(wallet.address);
-    console.log('💰 USDC Balance:', ethers.formatUnits(balance, 6), 'USDC');
+    console.log('💰 Balance:', ethers.formatEther(balance), 'ETH');
     
     if (balance === 0n) {
-      console.log('⚠️  Warning: Account has 0 USDC. You need Arc testnet USDC!');
-      console.log('🔗 Get Arc testnet USDC from Circle faucet');
+      console.log('⚠️  Warning: Account has 0 balance. You need Base Sepolia ETH!');
+      console.log('🔗 Get Base Sepolia ETH from: https://docs.base.org/tools/network-faucets');
       return;
     }
   } catch (error) {
@@ -79,7 +79,8 @@ async function deploy() {
     
     // Save deployment info
     const deploymentInfo = {
-      network: 'Arc Testnet',
+      network: 'Base Sepolia',
+      chainId: 84532,
       rpcUrl: RPC_URL,
       contracts: {
         CarbonPoints: carbonPointsAddress,
@@ -90,17 +91,18 @@ async function deploy() {
       timestamp: new Date().toISOString()
     };
     
-    fs.writeFileSync('deployment-arc.json', JSON.stringify(deploymentInfo, null, 2));
+    fs.writeFileSync('deployment-base-sepolia.json', JSON.stringify(deploymentInfo, null, 2));
     
     console.log('\n🎉 Deployment Summary:');
     console.log('========================');
-    console.log('Network:      Arc Testnet');
+    console.log('Network:      Base Sepolia');
+    console.log('Chain ID:     84532');
     console.log('CarbonPoints: ', carbonPointsAddress);
     console.log('OffsetManager:', offsetManagerAddress);
     console.log('USDC Address: ', USDC_ADDRESS);
     console.log('========================');
-    console.log('📄 Deployment info saved to deployment-arc.json');
-    console.log('🔗 View on explorer: https://testnet.arcscan.xyz');
+    console.log('📄 Deployment info saved to deployment-base-sepolia.json');
+    console.log('🔗 View on explorer: https://sepolia.basescan.org');
     
   } catch (error) {
     console.error('❌ Deployment failed:', error.message);

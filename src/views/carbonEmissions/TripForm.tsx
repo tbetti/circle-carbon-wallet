@@ -1,25 +1,30 @@
+"use client";
+
 import { Zap, Check, Loader2, Earth, Hourglass } from 'lucide-react'
 import { useState } from 'react'
-import { Button } from '../components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card'
-import { Input } from '../components/ui/input'
-import { Label } from '../components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select'
+import { Button } from '../../components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
+import { Input } from '../../components/ui/input'
+import { Label } from '../../components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select'
 // import { Separator } from '../components/ui/separator'
 
-export default function TripForm() {
+type Props = {
+  onCalculate: (data: { gpuType: string; hours: number; region: string }) => void;
+  loading: boolean;
+  submitted: boolean;
+  setSubmitted: (b: boolean) => void;
+  error: Record<string, string> | null;
+  setError: (e: Record<string, string> | null) => void;
+};
+
+export default function TripForm({ onCalculate, loading, submitted, setSubmitted, error, setError }: Props) {
 // export function TripForm({ onCalculate, loading, submitted, setSubmitted, error, setError }) {
   const [isConnected, setIsConnected] = useState(false)
   const [walletAddress, setWalletAddress] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // this is added post copy
-  const [loading, setLoading] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
-  const [error, setError] = useState({})
-  const onCalculate = (calculationData: { gpuType: string; hours: number; region: string }) =>{}
-
-  // State for the form inputs, pre-filled with your example
+    // State for the form inputs, pre-filled with your example
   const [gpuType, setGpuType] = useState('A100');
   const [hours, setHours] = useState('100');
   const [region, setRegion] = useState('US-CA');

@@ -18,7 +18,7 @@
 
 "use client";
 
-import { Card } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { FC, useState } from 'react'
 import { TransferView } from "../transfer";
 import TripForm from "./TripForm"

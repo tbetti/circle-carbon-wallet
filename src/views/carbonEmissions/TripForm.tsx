@@ -100,10 +100,6 @@ export default function TripForm({ onCalculate, loading, submitted, setSubmitted
           Enter your GPU usage details to calculate estimated CO2 emissions and earn CarbonPoints.
         </CardDescription>
       </CardHeader>
-      <CardContent className="px-10 pb-10">
-        </CardDescription>
-      </CardHeader>
-      {/* <Separator className="bg-[#E0E0E0]" /> */}
       <CardContent className="px-10 py-8">
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-2">

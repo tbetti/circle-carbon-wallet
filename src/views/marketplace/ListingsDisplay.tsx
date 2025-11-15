@@ -5,31 +5,48 @@ export const ListingsDisplay = ({ listings }: { listings: Record<string, unknown
   const displayData = listings || [];
 
   return (
-    <div className="text-left text-white max-h-96 overflow-y-auto">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {displayData.length > 0 ? (
         displayData.map((item) => (
-          <div key={String(item.listingId)} className="p-4 border-b border-gray-600">
-            <h4 className="font-bold text-lg">🌳 {String(item.projectName)}</h4>
-            <p className="text-sm text-gray-300">
-              {String(item.projectType)} • {String(item.country)} • {String(item.vintage)} Vintage
-            </p>
-            <div className="flex justify-between items-center mt-2">
-              <span className="font-bold text-green-400">
-                💰 {parseFloat(String(item.pricePerCredit)).toFixed(2)} USDC per credit
-              </span>
-              <span className="text-gray-400">
-                📦 {String(item.quantityAvailable)} available
-              </span>
-              <Link href={`/listing/${String(item.listingId)}`}>
-                <Button className="w-full bg-[#00A884] hover:bg-[#00A884]/90 text-white rounded-2xl h-12">
-                  Purchase
+          <div 
+            key={String(item.listingId)} 
+            className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow border border-gray-100 overflow-hidden flex flex-col"
+          >
+            <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 border-b border-gray-100">
+              <h4 className="font-bold text-lg text-gray-800">🌳 {String(item.projectName)}</h4>
+              <p className="text-sm text-gray-600 mt-2">
+                {String(item.projectType)} • {String(item.country)} • {String(item.vintage)} Vintage
+              </p>
+            </div>
+            
+            <div className="p-6 flex-1 flex flex-col justify-between">
+              <div className="space-y-3 mb-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600 text-sm">Price per Credit</span>
+                  <span className="font-bold text-green-600 text-lg">
+                    {parseFloat(String(item.pricePerCredit)).toFixed(2)} USDC
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600 text-sm">Available Credits</span>
+                  <span className="font-bold text-gray-800">
+                    {String(item.quantityAvailable)}
+                  </span>
+                </div>
+              </div>
+              
+              <Link href={`/listing/${String(item.listingId)}`} className="block w-full">
+                <Button className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg h-10 font-semibold transition-all">
+                  View Details
                 </Button>
               </Link>
             </div>
           </div>
         ))
       ) : (
-        <p>No listings found.</p>
+        <div className="col-span-full flex items-center justify-center py-12">
+          <p className="text-gray-500 text-lg">No carbon credits available yet.</p>
+        </div>
       )}
     </div>
   );

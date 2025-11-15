@@ -95,9 +95,12 @@ export default function TripForm({ onCalculate, loading, submitted, setSubmitted
   return (
     <Card style={{marginBottom: '20px'}} className="shadow-[0_4px_16px_rgba(0,0,0,0.06)] rounded-2xl border-[#E0E0E0]">
       <CardHeader className="px-10 pt-10 pb-4">
-        <CardTitle className="text-[1.25rem] text-[#fdfdfd]">Log your trip</CardTitle>
-        <CardDescription className="text-[#667085] text-sm pt-1">
-          We'll calculate the CarbonPoints to send to your wallet.
+        <CardTitle className="text-[1.25rem] text-gray-800">Calculate GPU Emissions</CardTitle>
+        <CardDescription className="text-gray-600 text-sm pt-1">
+          Enter your GPU usage details to calculate estimated CO2 emissions and earn CarbonPoints.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="px-10 pb-10">
         </CardDescription>
       </CardHeader>
       {/* <Separator className="bg-[#E0E0E0]" /> */}

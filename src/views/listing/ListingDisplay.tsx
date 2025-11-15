@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 // --- Placeholder for your actual purchase logic ---
 // You would replace this with your real purchase functions
-const fakePurchaseLogic = async (listingId, quantity, totalCost) => {
+const fakePurchaseLogic = async (listingId: string, quantity: number, totalCost: number): Promise<string> => {
   // 1. (YOUR CODE) Connect to wallet and request transaction
   console.log(`Requesting ${totalCost} for ${quantity} of ${listingId}`);
   
@@ -27,18 +27,18 @@ const fakePurchaseLogic = async (listingId, quantity, totalCost) => {
  * A component to handle the purchase flow for a specific listing.
  * Assumes 'listing' prop is provided, matching the API response.
  */
-export const ListingDisplay = ({ listing }) => {
+export const ListingDisplay = ({ listing }: { listing: Record<string, unknown> }) => {
   const router = useRouter();
   
   // State for the purchase flow
   const [purchaseState, setPurchaseState] = useState('confirm'); // 'confirm', 'pending', 'success', 'error'
   const [quantity, setQuantity] = useState(1);
-  const [transactionSig, setTransactionSig] = useState(null);
-  const [error, setError] = useState(null);
+  const [transactionSig, setTransactionSig] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   // Extract and calculate costs
   // Use parseFloat to keep decimals, not parseInt
-  const price = parseFloat(listing.pricePerCredit); 
+  const price = parseFloat(String(listing.pricePerCredit)); 
   const subtotal = price * quantity;
   const platformFee = subtotal * 0.05; // 5% platform fee
   const totalCost = subtotal + platformFee;
@@ -49,13 +49,14 @@ export const ListingDisplay = ({ listing }) => {
     setError(null);
     try {
       // Call your actual purchase logic here
-      const signature = await fakePurchaseLogic(listing.listingId, quantity, totalCost);
+      const signature = await fakePurchaseLogic(String(listing.listingId), quantity, totalCost);
       
       setTransactionSig(signature);
       setPurchaseState('success');
     } catch (err) {
       console.error(err);
-      setError(err.message || 'An unknown error occurred.');
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred.';
+      setError(errorMessage);
       setPurchaseState('error');
     }
   };
@@ -82,7 +83,7 @@ export const ListingDisplay = ({ listing }) => {
       return (
         <div className="p-6 space-y-4">
           <div className="text-center">
-            <h3 className="text-2xl font-semibold text-green-600">✅ Transaction Confirmed!</h3>
+            <h3 className="text-2xl font-semibold text-green-600">Transaction Confirmed!</h3>
           </div>
           <div className="p-4 bg-gray-100 rounded-lg text-sm space-y-2">
             <p className="flex justify-between">
@@ -125,7 +126,7 @@ export const ListingDisplay = ({ listing }) => {
           <div className="flex justify-between">
             <span className="text-gray-600">Project:</span>
             {/* Correctly access the nested project name */}
-            <span className="font-semibold">{listing.projectName}</span>
+            <span className="font-semibold">{String(listing.projectName)}</span>
           </div>
           <div className="flex justify-between items-center">
             <label htmlFor="quantity" className="text-gray-600">Quantity:</label>
@@ -135,7 +136,7 @@ export const ListingDisplay = ({ listing }) => {
               value={quantity}
               onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
               min="1"
-              max={listing.quantityAvailable}
+              max={Number(listing.quantityAvailable) || 0}
               className="w-20 text-right font-semibold border-b-2 border-gray-300 focus:border-[#00A884] outline-none"
             />
           </div>
@@ -161,10 +162,10 @@ export const ListingDisplay = ({ listing }) => {
         <div className="mt-6">
           <button 
             onClick={handlePurchase}
-            disabled={quantity > listing.quantityAvailable}
+            disabled={quantity > Number(listing.quantityAvailable || 0)}
             className="w-full h-12 px-6 bg-[#00A884] hover:bg-[#00A884]/90 text-white font-semibold rounded-xl transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
-            {quantity > listing.quantityAvailable ? 'Not Enough Available' : 'Confirm Purchase 👛'}
+            {quantity > Number(listing.quantityAvailable || 0) ? 'Not Enough Available' : 'Confirm Purchase 👛'}
           </button>
         </div>
       </div>

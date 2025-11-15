@@ -1,16 +1,16 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
 import { fetchListingDetails } from '../../lib/apiClient';
 import { ListingDisplay } from './ListingDisplay';
 
 export const ListingView = () => {
-  const router = useRouter();
-  const { id } = router.query; // Get the ID from the URL
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id'); // Get the ID from search params
 
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Ensure the ID is available before fetching
@@ -31,7 +31,8 @@ export const ListingView = () => {
         setListing(data.data);
       } catch (err) {
         console.error(err);
-        setError(err.message);
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }

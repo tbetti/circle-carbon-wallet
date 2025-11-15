@@ -18,16 +18,16 @@
 
 "use client";
 
-import { Card } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { FC, useState } from 'react'
 import { TransferView } from "../transfer";
 import TripForm from "./TripForm"
 import ResultsContainer from "./ResultsContainer";
 
 export const Home: FC = () => {
-  const [data, setData] = useState('');
+  const [data, setData] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Record<string, string> | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
   const handleCalculate = async () => {
@@ -43,24 +43,44 @@ export const Home: FC = () => {
       // setData(result.data); // Store the successful response
       setData({});
     } catch (err) {
-      setError(err.message);
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setError({ general: errorMessage });
     } finally {
       setLoading(false);
     }
   }
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <Card className="max-w-3xl mx-auto">
-        <TripForm 
-          onCalculate={handleCalculate} 
-          loading={loading}
-          submitted={submitted}
-          setSubmitted={setSubmitted}
-          error={error}
-          setError={setError}
-        />
-        <ResultsContainer result={data} isVisible={submitted} />
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-50 p-4 md:p-8">
+      <Card className="max-w-3xl mx-auto shadow-lg border-0">
+        {/* Header */}
+        <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-t-lg">
+          <CardTitle className="text-2xl md:text-3xl lg:text-4xl font-bold">
+            GPU Carbon Calculator
+          </CardTitle>
+          <p className="text-blue-100 mt-2">
+            Estimate the carbon footprint of your GPU computing activities
+          </p>
+        </CardHeader>
+        
+        <CardContent className="pt-8">
+          <TripForm 
+            onCalculate={handleCalculate} 
+            loading={loading}
+            submitted={submitted}
+            setSubmitted={setSubmitted}
+            error={error}
+            setError={setError}
+          />
+          <ResultsContainer result={data} isVisible={submitted} />
+        </CardContent>
       </Card>
+
+      {/* Info Footer */}
+      <div className="max-w-3xl mx-auto mt-8 text-center">
+        <p className="text-gray-600 text-sm">
+          💡 Tip: After calculating your emissions, you can offset them by purchasing carbon credits in our marketplace.
+        </p>
+      </div>
     </div>
   );
 }

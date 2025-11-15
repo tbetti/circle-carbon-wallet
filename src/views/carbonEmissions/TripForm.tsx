@@ -2,11 +2,11 @@
 
 import { Zap, Check, Loader2, Earth, Hourglass } from 'lucide-react'
 import { useState } from 'react'
-import { Button } from '../../components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
-import { Input } from '../../components/ui/input'
-import { Label } from '../../components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 // import { Separator } from '../components/ui/separator'
 
 type Props = {
@@ -34,7 +34,7 @@ export default function TripForm({ onCalculate, loading, submitted, setSubmitted
     const newErrors: Record<string, string> = {}
 
     if (!gpuType) {
-      newErrors.actualMode = 'Please select a GPU Type.'
+      newErrors.gpuType = 'Please select a GPU Type.'
     }
 
     const hoursNum = parseFloat(hours)
@@ -47,7 +47,7 @@ export default function TripForm({ onCalculate, loading, submitted, setSubmitted
     }
 
     if (!region) {
-      newErrors.actualMode = 'Please select a region.'
+      newErrors.region = 'Please select a region.'
     }
 
     setError(newErrors)
@@ -95,17 +95,16 @@ export default function TripForm({ onCalculate, loading, submitted, setSubmitted
   return (
     <Card style={{marginBottom: '20px'}} className="shadow-[0_4px_16px_rgba(0,0,0,0.06)] rounded-2xl border-[#E0E0E0]">
       <CardHeader className="px-10 pt-10 pb-4">
-        <CardTitle className="text-[1.25rem] text-[#fdfdfd]">Log your trip</CardTitle>
-        <CardDescription className="text-[#667085] text-sm pt-1">
-          We'll calculate the CarbonPoints to send to your wallet.
+        <CardTitle className="text-[1.25rem] text-gray-800">Calculate GPU Emissions</CardTitle>
+        <CardDescription className="text-gray-600 text-sm pt-1">
+          Enter your GPU usage details to calculate estimated CO2 emissions and earn CarbonPoints.
         </CardDescription>
       </CardHeader>
-      {/* <Separator className="bg-[#E0E0E0]" /> */}
       <CardContent className="px-10 py-8">
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="gpuType" className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-[#667085]" />
+            <Label htmlFor="gpuType" className="flex items-center gap-2 text-gray-800">
+              <Zap className="w-4 h-4 text-gray-600" />
               GPU Type
             </Label>
             <Select value={gpuType} onValueChange={handleGpuType}>
@@ -127,8 +126,8 @@ export default function TripForm({ onCalculate, loading, submitted, setSubmitted
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="hours" className="flex items-center gap-2 text-[#f8f8f8]">
-              <Hourglass className="w-4 h-4 text-[#667085]" />
+            <Label htmlFor="hours" className="flex items-center gap-2 text-gray-800">
+              <Hourglass className="w-4 h-4 text-gray-600" />
               Time (hrs)
             </Label>
             <Input
@@ -144,8 +143,8 @@ export default function TripForm({ onCalculate, loading, submitted, setSubmitted
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="mode" className="flex items-center gap-2 text-[#f8f8f8]">
-              <Earth className="w-4 h-4 text-[#667085]" />
+            <Label htmlFor="mode" className="flex items-center gap-2 text-gray-800">
+              <Earth className="w-4 h-4 text-gray-600" />
               Region
             </Label>
             <Select value={region} onValueChange={handleRegion}>

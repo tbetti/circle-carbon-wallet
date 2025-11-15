@@ -55,7 +55,7 @@ export const Home: FC = () => {
         {/* Header */}
         <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-t-lg">
           <CardTitle className="text-3xl md:text-4xl font-bold">
-            🖥️ GPU Carbon Calculator
+            GPU Carbon Calculator
           </CardTitle>
           <p className="text-blue-100 mt-2">
             Estimate the carbon footprint of your GPU computing activities

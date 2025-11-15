@@ -83,7 +83,7 @@ export const ListingDisplay = ({ listing }: { listing: Record<string, unknown> }
       return (
         <div className="p-6 space-y-4">
           <div className="text-center">
-            <h3 className="text-2xl font-semibold text-green-600">✅ Transaction Confirmed!</h3>
+            <h3 className="text-2xl font-semibold text-green-600">Transaction Confirmed!</h3>
           </div>
           <div className="p-4 bg-gray-100 rounded-lg text-sm space-y-2">
             <p className="flex justify-between">

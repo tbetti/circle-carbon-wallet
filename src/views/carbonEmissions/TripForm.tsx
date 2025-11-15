@@ -126,8 +126,8 @@ export default function TripForm({ onCalculate, loading, submitted, setSubmitted
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="hours" className="flex items-center gap-2 text-[#f8f8f8]">
-              <Hourglass className="w-4 h-4 text-[#667085]" />
+            <Label htmlFor="hours" className="flex items-center gap-2 text-gray-800">
+              <Hourglass className="w-4 h-4 text-gray-600" />
               Time (hrs)
             </Label>
             <Input
@@ -143,8 +143,8 @@ export default function TripForm({ onCalculate, loading, submitted, setSubmitted
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="mode" className="flex items-center gap-2 text-[#f8f8f8]">
-              <Earth className="w-4 h-4 text-[#667085]" />
+            <Label htmlFor="mode" className="flex items-center gap-2 text-gray-800">
+              <Earth className="w-4 h-4 text-gray-600" />
               Region
             </Label>
             <Select value={region} onValueChange={handleRegion}>

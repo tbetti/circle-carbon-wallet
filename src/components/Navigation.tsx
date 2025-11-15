@@ -10,10 +10,10 @@ export function Navigation() {
   const isActive = (path: string) => pathname === path;
 
   const navItems = [
-    { label: "🏠 Home", path: "/" },
-    { label: "💱 Transfer", path: "/transfer" },
-    { label: "🛒 Marketplace", path: "/marketplace" },
-    { label: "🌍 Emissions", path: "/emissions" },
+    { label: "Home", path: "/" },
+    { label: "Transfer", path: "/transfer" },
+    { label: "Marketplace", path: "/marketplace" },
+    { label: "Emissions", path: "/emissions" },
   ];
 
   return (
@@ -22,7 +22,7 @@ export function Navigation() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 font-bold text-xl text-white hover:text-green-400 transition">
-            🌱 Carbon Bridge
+            Carbon Bridge
           </Link>
 
           {/* Navigation Links */}

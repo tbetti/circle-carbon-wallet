@@ -67,7 +67,7 @@ export const MarketPlaceView: FC = ({}) => {
         {/* Header Section */}
         <div className="mb-12">
           <h1 className="text-5xl md:text-6xl font-bold text-center mb-4 text-transparent bg-clip-text bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600">
-            🌍 Carbon Credit Marketplace
+            Carbon Credit Marketplace
           </h1>
           <p className="text-center text-lg text-gray-600 mb-2">
             Offset the environmental impact of your cross-chain transfers
@@ -80,18 +80,18 @@ export const MarketPlaceView: FC = ({}) => {
         {/* How It Works Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
           <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
-            <div className="text-3xl mb-3">💱</div>
-            <h3 className="font-bold text-gray-800 mb-2">1. Make a Transfer</h3>
+            <div className="text-3xl mb-3 font-bold text-blue-600">1</div>
+            <h3 className="font-bold text-gray-800 mb-2">Make a Transfer</h3>
             <p className="text-sm text-gray-600">Cross-chain USDC transfers calculate their carbon footprint automatically.</p>
           </div>
           <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
-            <div className="text-3xl mb-3">📊</div>
-            <h3 className="font-bold text-gray-800 mb-2">2. Calculate Impact</h3>
+            <div className="text-3xl mb-3 font-bold text-blue-600">2</div>
+            <h3 className="font-bold text-gray-800 mb-2">Calculate Impact</h3>
             <p className="text-sm text-gray-600">We estimate CO2 emissions based on gas usage and blockchain activity.</p>
           </div>
           <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
-            <div className="text-3xl mb-3">🌱</div>
-            <h3 className="font-bold text-gray-800 mb-2">3. Offset Credits</h3>
+            <div className="text-3xl mb-3 font-bold text-blue-600">3</div>
+            <h3 className="font-bold text-gray-800 mb-2">Offset Credits</h3>
             <p className="text-sm text-gray-600">Purchase verified carbon credits to neutralize your transfer's impact.</p>
           </div>
         </div>

@@ -13,7 +13,7 @@ export const ListingsDisplay = ({ listings }: { listings: Record<string, unknown
             className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow border border-gray-100 overflow-hidden flex flex-col"
           >
             <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 border-b border-gray-100">
-              <h4 className="font-bold text-lg text-gray-800">🌳 {String(item.projectName)}</h4>
+              <h4 className="font-bold text-lg text-gray-800">{String(item.projectName)}</h4>
               <p className="text-sm text-gray-600 mt-2">
                 {String(item.projectType)} • {String(item.country)} • {String(item.vintage)} Vintage
               </p>

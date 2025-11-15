@@ -15,32 +15,32 @@ export default function ResultsContainer({ result, isVisible }: ResultsContainer
           <CardContent className="px-10 py-10 space-y-6">
             <div className="space-y-3 pr-12">
               <div className="flex items-start">
-                <div>
-                  <h3 className="text-[1.25rem] text-[#fdfdfd] mb-2">Results</h3>
-                  <ul className="text-[#fdfdfd] leading-relaxed">
-                    <li>
-                      <span className="text-3sm">✅</span>
-                      <span className="font-semibold">CO2 Emitted: </span>{result && String(result.co2Tons)} tons
+                <div className="w-full">
+                  <h3 className="text-[1.25rem] text-gray-800 mb-4 font-bold">Calculation Results</h3>
+                  <ul className="text-gray-700 leading-relaxed space-y-2">
+                    <li className="flex justify-between items-center bg-blue-50 p-3 rounded">
+                      <span className="font-semibold">CO2 Emitted:</span>
+                      <span className="text-blue-600 font-bold">{result && String(result.co2Tons)} tons</span>
                     </li>
-                    <li>
-                      <span className="text-3sm">✅</span>
-                      <span className="font-semibold">Power Used: </span>{result && String(result.energyKwh)} KW
+                    <li className="flex justify-between items-center bg-green-50 p-3 rounded">
+                      <span className="font-semibold">Power Used:</span>
+                      <span className="text-green-600 font-bold">{result && String(result.energyKwh)} KW</span>
                     </li>
-                    <li>
-                      <span className="text-3sm">✅</span>
-                      <span className="font-semibold">Credit Needed: </span>{result && String(result.creditsNeeded)} KW
+                    <li className="flex justify-between items-center bg-orange-50 p-3 rounded">
+                      <span className="font-semibold">Credits Needed:</span>
+                      <span className="text-orange-600 font-bold">{result && String(result.creditsNeeded)} units</span>
                     </li>
-                    <li>
-                      <span className="text-3sm">✅</span>
-                      <span className="font-semibold">Estimated Cost: </span>{result && 'N/A'} KW
+                    <li className="flex justify-between items-center bg-purple-50 p-3 rounded">
+                      <span className="font-semibold">Estimated Cost:</span>
+                      <span className="text-purple-600 font-bold">{result && 'Varies'} USDC</span>
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
-            <Link href={"/marketplace"}>
-              <Button className="w-full bg-[#00A884] hover:bg-[#00A884]/90 text-white rounded-2xl h-12">
-                Go to Marketplace
+            <Link href={"/marketplace"} className="block w-full">
+              <Button className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg h-12 font-semibold">
+                Offset These Emissions in Marketplace
               </Button>
             </Link>
           </CardContent>

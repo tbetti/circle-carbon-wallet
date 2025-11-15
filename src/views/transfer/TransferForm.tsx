@@ -78,7 +78,7 @@ export const TransferForm = () => {
     <>
       <CardHeader>
         <CardTitle className="text-center text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-          💱 Cross-Chain USDC Transfer
+          Cross-Chain USDC Transfer
         </CardTitle>
         <p className="text-center text-gray-600 text-sm mt-2">
           Move USDC securely across 16 blockchains
@@ -148,7 +148,7 @@ export const TransferForm = () => {
             <span className="absolute right-3 top-2.5 text-sm text-gray-500">USDC</span>
           </div>
           <div className="flex justify-between items-center">
-            <p className="text-sm text-gray-600">💰 Available: {balance} USDC</p>
+            <p className="text-sm text-gray-600">Available: {balance} USDC</p>
             <button
               type="button"
               onClick={() => setAmount(balance)}
@@ -158,7 +158,7 @@ export const TransferForm = () => {
             </button>
           </div>
           {amount && parseFloat(amount) > parseFloat(balance) && (
-            <p className="text-sm text-red-500 font-medium">⚠️ Insufficient balance</p>
+            <p className="text-sm text-red-500 font-medium">Insufficient balance</p>
           )}
         </div>
 
@@ -177,9 +177,9 @@ export const TransferForm = () => {
 
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <div className="flex justify-between items-center">
-            <span className="text-sm font-medium text-gray-700">📊 Estimated Details</span>
+            <span className="text-sm font-medium text-gray-700">Estimated Details</span>
             <span className={`text-sm font-bold ${transferType === "fast" ? "text-green-600" : "text-orange-600"}`}>
-              {transferType === "fast" ? "⚡ Faster" : "📦 Standard"}
+              {transferType === "fast" ? "Faster" : "Standard"}
             </span>
           </div>
           <div className="mt-2 space-y-1 text-sm text-gray-600">

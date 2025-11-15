@@ -1,54 +1,26 @@
 {
   "name": "circle-cross-chain-transfer-next",
   "version": "0.1.0",
-  "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint ."
+    "start": "next start"
   },
   "dependencies": {
     "@circle-fin/adapter-solana": "^1.1.1",
     "@circle-fin/adapter-viem-v2": "^1.1.0",
     "@circle-fin/bridge-kit": "^1.1.1",
-    "@coral-xyz/anchor": "^0.32.1",
     "@openzeppelin/contracts": "^5.4.0",
-    "@radix-ui/react-dropdown-menu": "^2.1.16",
-    "@radix-ui/react-label": "^2.1.7",
-    "@radix-ui/react-progress": "^1.1.7",
-    "@radix-ui/react-select": "^2.2.6",
-    "@radix-ui/react-slot": "^1.2.3",
-    "@radix-ui/react-tabs": "^1.1.13",
-    "@solana/spl-token": "^0.4.14",
-    "@solana/wallet-adapter-phantom": "^0.9.28",
-    "@solana/web3.js": "^1.98.4",
-    "@tanstack/react-query": "^5.90.5",
-    "axios": "^1.12.2",
-    "bs58": "^6.0.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
+    "dotenv": "^17.2.3",
     "ethers": "^6.15.0",
-    "lucide-react": "^0.548.0",
-    "next": "15.5.4",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "react-timer-hook": "^4.0.5",
-    "tailwind-merge": "^3.3.1",
-    "tailwindcss-animate": "^1.0.7",
     "viem": "^2.39.0"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.13",
-    "@types/node": "^24",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@typescript-eslint/eslint-plugin": "^8.46.2",
-    "@typescript-eslint/parser": "^8.46.2",
-    "eslint": "^9.38.0",
-    "eslint-config-next": "^16.0.0",
-    "postcss": "^8",
-    "tailwindcss": "^4.1.16",
-    "typescript": "^5"
+    "@nomicfoundation/hardhat-ignition": "^3.0.5",
+    "@nomicfoundation/hardhat-toolbox-viem": "^5.0.1",
+    "hardhat": "^3.0.14",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }

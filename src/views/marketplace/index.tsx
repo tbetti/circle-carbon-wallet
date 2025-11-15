@@ -3,7 +3,7 @@
 import { FC, useState, useEffect } from 'react';
 import Link from 'next/link';
 // Make sure this import path is correct for your project structure
-// import { fetchMarketplaceListings } from '../../pages/api/apiClient';
+import { fetchMarketplaceListings } from '../../lib/apiClient';
 import pkg from '../../../package.json'; // Adjust path as needed
 import { ListingsDisplay } from './ListingsDisplay';
 
@@ -21,15 +21,15 @@ export const MarketPlaceView: FC = ({}) => {
         setError(null);
 
         // Call the API function with all nulls, as requested
-        // const result = await fetchMarketplaceListings({
-        //   projectType: null,
-        //   minPrice: null,
-        //   maxPrice: null,
-        //   minQuantity: null,
-        //   sortBy: null,
-        //   limit: 10,
-        // });
-        // setListings(result.data.listings || []);
+        const result = await fetchMarketplaceListings({
+          projectType: '',
+          minPrice: 0,
+          maxPrice: 10000000000,
+          minQuantity: 0,
+          sortBy: '',
+          limit: 10,
+        });
+        setListings(result.data.listings || []);
       } catch (err) {
         console.error('Failed to fetch listings:', err);
         setError(err.message);
